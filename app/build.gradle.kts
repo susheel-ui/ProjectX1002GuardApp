@@ -44,8 +44,18 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
+
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

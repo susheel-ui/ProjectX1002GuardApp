@@ -18,9 +18,23 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(activityBinding.root)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        //code for automatic login from already login user
         Handler().postDelayed({
-          startActivity(Intent(this,LoginActivity::class.java))
+            val sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
+            val token = sharedPreferences.getString(
+                Keywords.USERTOKEN.toString(),
+                Keywords.NOTFOUND.toString()
+            )
+            if (!token.equals(Keywords.NOTFOUND.toString())) {
+                startActivity(Intent(this, HomeActivity::class.java))
+            } else {
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
 //            Toast.makeText(this, "app is running", Toast.LENGTH_SHORT).show()
-        },2000)
+        }, 2000)
     }
 }

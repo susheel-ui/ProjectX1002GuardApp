@@ -82,6 +82,7 @@
             android:layout_margin="40dp"
             >
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/mobileNumber"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="username"
@@ -89,6 +90,7 @@
                 android:background="@drawable/input_bg_with_border"
                 />
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="password"

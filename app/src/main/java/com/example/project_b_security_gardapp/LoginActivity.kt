@@ -1,26 +1,118 @@
 package com.example.project_b_security_gardapp
 
+import android.app.Dialog
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.project_b_security_gardapp.api.Entities.userLoginEntity
+import com.example.project_b_security_gardapp.api.Repo.UserRepository
+import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
+import com.example.project_b_security_gardapp.api.Services.UserServices
 import com.example.project_b_security_gardapp.databinding.ActivityLoginBinding
+import com.example.project_b_security_gardapp.viewModels.Login.loginViewModel
+import com.example.project_b_security_gardapp.viewModels.Login.loginViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.internal.http.HttpMethod
 
 class LoginActivity : AppCompatActivity() {
     lateinit var activityBinding: ActivityLoginBinding
+
+    //    lateinit var loginViewModel: loginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(activityBinding.root) // Set content view first
+
+        val userServices = RetrofitInstance.getInstance.create(UserServices::class.java)
+        val userRepository = UserRepository(userServices)
+//        loginViewModel = ViewModelProvider(this, loginViewModelFactory(userRepository))[loginViewModel::class.java]
+
         enableEdgeToEdge()
-        setContentView(activityBinding.root)
+
+
 
         activityBinding.buttonLogin.setOnClickListener {
-           //TODO:: HERE WE WILL ADD THE ACTION ON LOGIN
+//           loginViewModel.login() // Call the login function from the ViewModel
 
-            //AFTER WE WILL ADD THIS INTENT
-                startActivity(Intent(this,HomeActivity::class.java))
+            val loading = AlertDialog.Builder(this).setView(R.layout.loading_layout).create()
+            loading.show()
+
+            if (activityBinding.mobileNumber.text.toString().isEmpty()) {
+                activityBinding.mobileNumber.error = "Please enter your phone number"
+                loading.dismiss()
+
+            } else if (activityBinding.password.text.toString().isEmpty()) {
+                activityBinding.password.error = "Please enter your password"
+                loading.dismiss()
+            } else {
+                val phoneNumber = activityBinding.mobileNumber.text.toString()
+                val password = activityBinding.password.text.toString()
+
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val loginEntity = userLoginEntity()
+                        loginEntity.phoneNumber = "+91".plus(phoneNumber)
+                        loginEntity.password = password
+                        val result = userRepository.login(loginEntity)
+                        Log.d(TAG, "onCreate: ${result.code()}")
+                        Log.d(TAG, "onCreate result : ${result.body()?.token}")
+                        if (result.code() == 200) {
+                            withContext(Dispatchers.Main) {
+                                if (result.body() != null) {
+                                    val token = result.body()?.token
+                                    val sharedPreferences = getSharedPreferences(
+                                        Keywords.MYPREFS.toString(),
+                                        Context.MODE_PRIVATE
+                                    )
+                                    val editor = sharedPreferences.edit()
+                                    editor.putString(Keywords.USERTOKEN.toString(), token)
+                                    editor.apply()
+                                    loading.dismiss()
+                                    startActivity(
+                                        Intent(
+                                            applicationContext,
+                                            HomeActivity::class.java
+                                        )
+                                    )
+                                }
+                            }
+                        } else {
+                            if (result.code() == 500) {
+                                try {
+                                    withContext(Dispatchers.Main) {
+                                        loading.dismiss()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "***Invalid User****",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        //TODO:: here we have to make textview visible that will give a error
+                                    }
+                                } catch (e: Exception) {
+                                    Log.d(TAG, "onCreate: error in coroutine running")
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, "onCreate exceptions: ${e.message}")
+                    }
+                }
+            }
+
         }
     }
 }

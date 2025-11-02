@@ -8,4 +8,9 @@
     <string name="new_guest_form">New Guest Form</string>
     <string name="name">Name</string>
     <string name="flat_number">Flat Number</string>
+    <string name="loading">Loading...</string>
+    <string name="send">Send</string>
+    <string name="cancle">Cancle</string>
+    <string name="images_and_docs">Images and Docs</string>
+    <string name="enter_short_description">Enter short description</string>
 </resources>
