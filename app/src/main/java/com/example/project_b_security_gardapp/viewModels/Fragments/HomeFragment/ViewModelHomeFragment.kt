@@ -1,9 +1,7 @@
 package com.example.project_b_security_gardapp.viewModels.Fragments.HomeFragment
 
 import android.content.ContentValues.TAG
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,18 +10,31 @@ import com.example.project_b_security_gardapp.api.Entities.User
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import kotlinx.coroutines.launch
 
-class ViewModelHomeFragment(private val userRepository: UserRepository) :ViewModel() {
-    private val UserData = MutableLiveData<User>()
-    val data:LiveData<User> = UserData
+class ViewModelHomeFragment(private val userRepository: UserRepository) : ViewModel() {
 
+    private val _userData = MutableLiveData<User>()
+    val userData: LiveData<User> = _userData
 
-    fun getUserInfo(token:String){
+    val loading = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<String>()
+
+    fun getUserInfo(token: String) {
         viewModelScope.launch {
-           val result =  userRepository.GetUserBytoken(token)
-           if (result.body()!= null){
-               UserData.postValue(result.body())
-           }
+            loading.postValue(true)
+            try {
+                val result = userRepository.GetUserBytoken(token)
+                if (result.isSuccessful && result.body() != null) {
+                    _userData.postValue(result.body())
+                } else {
+                    errorMessage.postValue("Failed: ${result.code()} - ${result.message()}")
+                    Log.e(TAG, "Failed: ${result.code()} - ${result.message()}")
+                }
+            } catch (e: Exception) {
+                errorMessage.postValue(e.localizedMessage ?: "Unexpected error")
+                Log.e(TAG, "Error fetching user info: ${e.message}")
+            } finally {
+                loading.postValue(false)
+            }
         }
-
     }
 }

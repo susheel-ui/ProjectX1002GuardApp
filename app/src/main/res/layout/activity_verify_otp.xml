@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="24dp">
+
+    <!-- App Header -->
+    <TextView
+        android:id="@+id/text_app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMARTGATE"
+        android:textColor="@color/text_Primary_color"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <!-- OTP Illustration / Icon -->
+    <ImageView
+        android:id="@+id/image_otp_icon"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="OTP Icon"
+        app:layout_constraintTop_toBottomOf="@id/text_app_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+       />
+
+    <!-- OTP Title -->
+    <TextView
+        android:id="@+id/text_otp_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verify OTP"
+        android:textColor="@color/text_Primary_color"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/image_otp_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/text_otp_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter the 6-digit code sent to your phone"
+        android:textColor="@color/Primary_Color"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/text_otp_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
+    <!-- OTP Input Fields -->
+    <LinearLayout
+        android:id="@+id/otp_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/text_otp_subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 6 OTP Boxes -->
+        <EditText
+            android:id="@+id/otp1"
+            style="@style/OtpBoxStyle"/>
+        <EditText
+            android:id="@+id/otp2"
+            style="@style/OtpBoxStyle"/>
+        <EditText
+            android:id="@+id/otp3"
+            style="@style/OtpBoxStyle"/>
+        <EditText
+            android:id="@+id/otp4"
+            style="@style/OtpBoxStyle"/>
+        <EditText
+            android:id="@+id/otp5"
+            style="@style/OtpBoxStyle"/>
+        <EditText
+            android:id="@+id/otp6"
+            style="@style/OtpBoxStyle"/>
+    </LinearLayout>
+
+    <!-- Verify Button -->
+    <Button
+        android:id="@+id/button_verify"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Verify OTP"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/Primary_Color"
+        android:textStyle="bold"
+        android:elevation="6dp"
+        app:layout_constraintTop_toBottomOf="@id/otp_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp"/>
+
+    <!-- Resend Option -->
+    <TextView
+        android:id="@+id/text_resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Didn’t receive the code? Resend OTP"
+        android:textColor="@color/Primary_Color"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/button_verify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

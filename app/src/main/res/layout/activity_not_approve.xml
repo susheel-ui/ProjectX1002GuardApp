@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9FB"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context=".NotApprove_Activity">
+
+    <!-- Alert Icon -->
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/sorry"
+        android:contentDescription="@string/warning_icon"
+        />
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/access_denied"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_marginTop="16dp" />
+
+    <!-- Message -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/your_account_is_not_approved_yet_nplease_contact_your_admin_for_access"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textColor="#616161"
+        android:layout_marginTop="8dp" />
+
+
+    <!-- Contact Admin Button -->
+    <Button
+        android:id="@+id/btn_contact_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_admin"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#3F51B5"
+        android:layout_marginTop="24dp"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="12dp" />
+
+</LinearLayout>

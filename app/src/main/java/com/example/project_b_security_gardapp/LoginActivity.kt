@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -15,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.ocx_1002_uapp.Services.WebSocketService
 import com.example.project_b_security_gardapp.api.Entities.userLoginEntity
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
@@ -43,7 +45,9 @@ class LoginActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
 
-
+        activityBinding.RegisterAccountTV.setOnClickListener{
+            startActivity(Intent(applicationContext, GardRegistrationActivity::class.java))
+        }
 
         activityBinding.buttonLogin.setOnClickListener {
 //           loginViewModel.login() // Call the login function from the ViewModel
@@ -71,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(TAG, "onCreate: ${result.code()}")
                         Log.d(TAG, "onCreate result : ${result.body()?.token}")
                         if (result.code() == 200) {
-                            withContext(Dispatchers.Main) {
+                            CoroutineScope(Dispatchers.IO).launch {
                                 if (result.body() != null) {
                                     val token = result.body()?.token
                                     val sharedPreferences = getSharedPreferences(
@@ -80,15 +84,23 @@ class LoginActivity : AppCompatActivity() {
                                     )
                                     val editor = sharedPreferences.edit()
                                     editor.putString(Keywords.USERTOKEN.toString(), token)
+                                    editor.putString(Keywords.OwnerId.toString(),result.body()!!.userId.toString())
                                     editor.apply()
                                     loading.dismiss()
-                                    startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            HomeActivity::class.java
-                                        )
-                                    )
                                 }
+                            }.invokeOnCompletion {
+                                val intent = Intent(applicationContext, WebSocketService::class.java)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    startForegroundService(intent)
+                                } else {
+                                    startService(intent)
+                                }
+                                startActivity(
+                                    Intent(
+                                        applicationContext,
+                                        HomeActivity::class.java
+                                    )
+                                )
                             }
                         } else {
                             if (result.code() == 500) {

@@ -52,6 +52,12 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.java-websocket:Java-WebSocket:1.5.6")
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

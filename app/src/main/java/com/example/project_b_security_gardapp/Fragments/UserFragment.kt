@@ -3,6 +3,7 @@ package com.example.project_b_security_gardapp.Fragments
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.project_b_security_gardapp.Keywords
 import com.example.project_b_security_gardapp.R
+import com.example.project_b_security_gardapp.VerifyOtpActivity
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
 import com.example.project_b_security_gardapp.api.Services.UserServices
@@ -43,7 +45,7 @@ class UserFragment : Fragment() {
         }
     }
 
-    @SuppressLint("CommitPrefEdits")
+    @SuppressLint("CommitPrefEdits", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,13 +73,16 @@ class UserFragment : Fragment() {
             bindingUserFragment.UserNameTV.text = it.fullName
             bindingUserFragment.mobileNumberTV.text = it.phoneNumber
             bindingUserFragment.societyNameTV.text = it.societyName
-            bindingUserFragment.GardIdTV.text = "GardId :- ${it.id}"
+            bindingUserFragment.GardIdTV.text = "GuardId :- ${it.id}"
         }
         bindingUserFragment.btnLogOut.setOnClickListener {
             val editor = sharedPreferences.edit()
-            editor.putString(Keywords.USERTOKEN.toString(), Keywords.NOTFOUND.toString())
+            editor.clear()
             editor.apply()
             activity?.finish()
+        }
+        bindingUserFragment.changePasswordbtn.setOnClickListener {
+            activity?.startActivity(Intent(requireContext(),VerifyOtpActivity::class.java))
         }
         return bindingUserFragment.root
     }

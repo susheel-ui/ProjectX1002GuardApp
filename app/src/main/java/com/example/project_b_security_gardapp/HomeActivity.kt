@@ -3,6 +3,7 @@ package com.example.project_b_security_gardapp
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -12,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.ocx_1002_uapp.Services.WebSocketService
 import com.example.project_b_security_gardapp.Fragments.HistoryFragment
 import com.example.project_b_security_gardapp.Fragments.HomeFragment
 import com.example.project_b_security_gardapp.Fragments.UserFragment
@@ -34,6 +36,17 @@ class HomeActivity : AppCompatActivity() {
         setContentView(activityBinding.root)
         val sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
         val token = sharedPreferences.getString(Keywords.USERTOKEN.toString(),"NotFound")
+
+        try {
+            val intent = Intent(applicationContext, WebSocketService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
+        }catch (e:Exception){
+            Log.d(TAG, "onCreate: HomeActivity ${e.message}")
+        }
 
         if(token.toString().equals("NotFound")){
                     Toast.makeText(this, token.toString(), Toast.LENGTH_SHORT).show()

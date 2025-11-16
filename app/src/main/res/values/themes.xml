@@ -6,4 +6,18 @@
     </style>
 
     <style name="Theme.Project_B_Security_GardApp" parent="Base.Theme.Project_B_Security_GardApp" />
+
+    <style name="OtpBoxStyle">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:inputType">number</item>
+        <item name="android:background">@drawable/otp_box_bg</item>
+        <item name="android:textColor">@color/Primary_Color</item>
+
+
+    </style>
+
 </resources>

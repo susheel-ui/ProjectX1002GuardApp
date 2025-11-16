@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Log In"
+            android:text="Gard Log In"
             android:textColor="#335AA6"
             android:textSize="34sp"
             android:textStyle="bold"
@@ -124,6 +124,18 @@
             app:layout_constraintStart_toStartOf="@id/LLForm"
             app:layout_constraintTop_toBottomOf="@id/checkbox_remember_me" />
 
+
+        <TextView
+            android:id="@+id/RegisterAccountTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_an_accound_register_account"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_login"
+
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

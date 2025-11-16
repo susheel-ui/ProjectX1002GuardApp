@@ -4,6 +4,9 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.project_b_security_gardapp.api.Entities.GuestRequestResponse
+import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
+import com.example.project_b_security_gardapp.api.Entities.SignUpUserEntity
 import com.example.project_b_security_gardapp.api.Entities.User
 import com.example.project_b_security_gardapp.api.Entities.userLoginEntity
 import com.example.project_b_security_gardapp.api.Responses.UserLoginResponse
@@ -15,6 +18,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import retrofit2.Response
 
 import java.io.File
@@ -38,6 +42,9 @@ class UserRepository(private val userServices: UserServices) {
 //            loginData.postValue(result.body())
 //        }
         return result
+    }
+    suspend fun SignUp(body:SignUpUserEntity):Response<UserLoginResponse>{
+        return userServices.SignUp(body)
     }
 
     suspend fun GetUserBytoken(token: String): Response<User> {
@@ -93,4 +100,19 @@ class UserRepository(private val userServices: UserServices) {
             500 // return fallback error code
         }
     }
+
+    suspend fun getAllGuestRequests(token: String): Response<List<RequestsResultEntity>> {
+        return userServices.getAllGuestRequests(token)
+    }
+
+    suspend fun getRequestById(id:String,token: String): Response<RequestsResultEntity> {
+        return userServices.getRequestById(token,id.toInt())
+    }
+    suspend fun VisitorCheckIn(id:String,token: String): Response<RequestsResultEntity> {
+        return userServices.VisitorCheckIn(token,id.toInt())
+    }
+    suspend fun VisitorCheckOut(id:String,token: String): Response<RequestsResultEntity> {
+        return userServices.VisitorCheckOut(token,id.toInt())
+    }
+
 }

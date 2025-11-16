@@ -12,8 +12,14 @@
         android:icon="@drawable/history"
         />
     <item
+        android:id="@+id/btn_Attendance"
+        android:title="Attendance"
+        android:icon="@drawable/attendance"
+        />
+    <item
         android:id="@+id/btm_nav_User"
         android:title="User"
         android:icon="@drawable/user"
         />
+
 </menu>

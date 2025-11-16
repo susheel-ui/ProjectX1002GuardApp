@@ -8,7 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.project_b_security_gardapp.api.Entities.User
+import com.example.project_b_security_gardapp.api.Repo.UserRepository
+import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
+import com.example.project_b_security_gardapp.api.Services.UserServices
 import com.example.project_b_security_gardapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var activityBinding: ActivityMainBinding
@@ -30,7 +38,21 @@ class MainActivity : AppCompatActivity() {
                 Keywords.NOTFOUND.toString()
             )
             if (!token.equals(Keywords.NOTFOUND.toString())) {
-                startActivity(Intent(this, HomeActivity::class.java))
+
+// Login By Token and check valid or expired
+                val service = RetrofitInstance.getInstance.create(UserServices::class.java)
+                val repo  = UserRepository(service)
+                var response: Response<User>? = null
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                   response =  repo.GetUserBytoken(token.toString())
+                }
+                job.invokeOnCompletion {
+                       if(response?.code() == 200){
+                           startActivity(Intent(this, HomeActivity::class.java))
+                       }else{
+                           startActivity(Intent(this, LoginActivity::class.java))
+                       }
+                    }
             } else {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
