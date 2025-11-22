@@ -1,11 +1,19 @@
 package com.example.project_b_security_gardapp.Fragments
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.project_b_security_gardapp.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.project_b_security_gardapp.Adapters.StaffItemAdapter
+import com.example.project_b_security_gardapp.AttendanceActivity
+import com.example.project_b_security_gardapp.Keywords
+import com.example.project_b_security_gardapp.databinding.FragmentAttendanceBinding
+import com.example.project_b_security_gardapp.viewModels.StaffAttendanceViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,12 +29,23 @@ class Attendance_Fragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding: FragmentAttendanceBinding
+    lateinit var viewModel: StaffAttendanceViewModel
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var adapter: StaffItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+        }
+        activity?.let {
+            binding = FragmentAttendanceBinding.inflate(layoutInflater)
+            sharedPreferences = it.getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(),Context.MODE_PRIVATE)
+            adapter  = StaffItemAdapter(requireContext(),emptyList())
+            binding.rvStaffList.layoutManager  = LinearLayoutManager(requireContext())
+
         }
     }
 
@@ -35,7 +54,24 @@ class Attendance_Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_attendance_, container, false)
+
+        viewModel = StaffAttendanceViewModel()
+        binding.btnTodayAttendance.setOnClickListener {
+            startActivity(Intent(requireContext(), AttendanceActivity::class.java))
+        }
+
+
+        val token = sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(),Keywords.GUARD_NOT_FOUND.toString())
+        viewModel.getStaffs(token.toString())
+        viewModel.staffAttendanceList.observe(viewLifecycleOwner){
+            adapter = StaffItemAdapter(requireContext(),it)
+            binding.rvStaffList.adapter = adapter
+        }
+        //loading alert box
+        viewModel.loading.observe(viewLifecycleOwner){
+
+        }
+        return binding.root
     }
 
     companion object {

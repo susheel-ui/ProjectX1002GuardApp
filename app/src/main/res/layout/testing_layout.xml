@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginBottom="0dp"
+                android:layout_marginBottom="40dp"
                 android:text="@string/app_name"
                 android:textColor="@color/text_Primary_color"
                 android:textSize="28sp"
@@ -38,15 +38,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-<!--            <ImageView-->
-<!--                android:layout_width="20dp"-->
-<!--                android:layout_height="20dp"-->
-<!--                android:layout_marginEnd="24dp"-->
-<!--                android:src="@android:drawable/ic_popup_reminder"-->
-<!--                app:tint="@color/text_Primary_color"-->
-<!--                app:layout_constraintBottom_toBottomOf="@id/tv_app_name"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@id/tv_app_name" />-->
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="24dp"
+                android:src="@android:drawable/ic_popup_reminder"
+                app:tint="@color/text_Primary_color"
+                app:layout_constraintBottom_toBottomOf="@id/tv_app_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_app_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -107,21 +107,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--            <TextView-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/ic_launcher_background"-->
-            <!--                android:backgroundTint="#33FFFFFF"-->
-            <!--                android:paddingStart="12dp"-->
-            <!--                android:paddingTop="5dp"-->
-            <!--                android:paddingEnd="12dp"-->
-            <!--                android:paddingBottom="5dp"-->
-            <!--                android:text="Active Member"-->
-            <!--                android:textColor="@color/white"-->
-            <!--                android:textSize="12sp"-->
-            <!--                android:textStyle="bold"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent" />-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/ic_launcher_background"-->
+<!--                android:backgroundTint="#33FFFFFF"-->
+<!--                android:paddingStart="12dp"-->
+<!--                android:paddingTop="5dp"-->
+<!--                android:paddingEnd="12dp"-->
+<!--                android:paddingBottom="5dp"-->
+<!--                android:text="Active Member"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="12sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

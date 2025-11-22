@@ -30,14 +30,14 @@ class VisitorListViewAdapter(
 //            binding.tvDescription.text = visitor.description
             binding.tvType.text = visitor.status
 //
-            try {
-                val timeAgoTxt = getTimeAgo(visitor.createdAt.toString())
-            Log.d(TAG, "bind: ${timeAgoTxt.toString()}")
-            binding.tvTimestamp.text = timeAgoTxt.toString()
-            }catch (e:Exception){
-                binding.tvTimestamp.text = "N/A"
-                Log.d(TAG, "bind: ${e.message}")
-            }
+//            try {
+//                val timeAgoTxt = getTimeAgo(visitor.createdAt.toString())
+//            Log.d(TAG, "bind: ${timeAgoTxt.toString()}")
+//            binding.tvTimestamp.text = timeAgoTxt.toString()
+//            }catch (e:Exception){
+//                binding.tvTimestamp.text = "N/A"
+//                Log.d(TAG, "bind: ${e.message}")
+//            }
             // ✅ Load guest image (if available)
 //            Glide.with(context)
 //                .load("http://your-server-ip:8080" + visitor.photo1)

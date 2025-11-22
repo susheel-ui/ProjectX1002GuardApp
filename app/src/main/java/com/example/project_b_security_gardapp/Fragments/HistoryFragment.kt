@@ -29,7 +29,7 @@ class HistoryFragment : Fragment() {
 
         // Initialize SharedPreferences
         activity?.let {
-            sharedPreferences = it.getSharedPreferences(Keywords.MYPREFS.toString(), Context.MODE_PRIVATE)
+            sharedPreferences = it.getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), Context.MODE_PRIVATE)
         }
 
         // Initialize ViewModel
@@ -48,7 +48,7 @@ class HistoryFragment : Fragment() {
         binding.RecentGuest.adapter = adapter
 
         // ✅ Get token from SharedPreferences
-        val token = sharedPreferences.getString(Keywords.USERTOKEN.toString(), "").toString()
+        val token = sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(), "").toString()
         Log.d(TAG, "HistoryFragment: Token = $token")
 
         // ✅ Fetch history data

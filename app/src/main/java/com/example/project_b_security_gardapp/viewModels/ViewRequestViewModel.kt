@@ -39,6 +39,7 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
                       _loading.postValue(false)
                   }else{
                       Log.d("Error", "getRequestById: ${result.code()}")
+                     
                   }
               }catch (e:Exception){
                   Log.d("Exception", "getRequestById: ${e.toString()} ")

@@ -50,7 +50,11 @@ class RequestsViewModel : ViewModel() {
                     val result = response.body()!!
                     // ✅ "data" contains the actual list of guest requests
                     _requestsLiveData.postValue(result)
-                    _recentRequestsLiveData.postValue(result.subList(0,3))
+                    if (result.size > 3) {
+                        _recentRequestsLiveData.postValue(result.subList(0,3))
+                    }else{
+                        _recentRequestsLiveData.postValue(result.subList(0,result.size))
+                    }
                     Log.d("RequestsViewModel", "Fetched ${result.size} guest requests")
                 } else {
                     val msg = "Failed: ${response.code()} - ${response.message()}"

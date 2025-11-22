@@ -1,10 +1,8 @@
 package com.example.project_b_security_gardapp
 
-import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,23 +10,16 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.ocx_1002_uapp.Services.WebSocketService
 import com.example.project_b_security_gardapp.api.Entities.userLoginEntity
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
 import com.example.project_b_security_gardapp.api.Services.UserServices
 import com.example.project_b_security_gardapp.databinding.ActivityLoginBinding
-import com.example.project_b_security_gardapp.viewModels.Login.loginViewModel
-import com.example.project_b_security_gardapp.viewModels.Login.loginViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.http.HttpMethod
 
 class LoginActivity : AppCompatActivity() {
     lateinit var activityBinding: ActivityLoginBinding
@@ -59,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
                 activityBinding.mobileNumber.error = "Please enter your phone number"
                 loading.dismiss()
 
-            } else if (activityBinding.password.text.toString().isEmpty()) {
+            }else if (activityBinding.password.text.toString().isEmpty()) {
                 activityBinding.password.error = "Please enter your password"
                 loading.dismiss()
             } else {
@@ -79,12 +70,12 @@ class LoginActivity : AppCompatActivity() {
                                 if (result.body() != null) {
                                     val token = result.body()?.token
                                     val sharedPreferences = getSharedPreferences(
-                                        Keywords.MYPREFS.toString(),
+                                        Keywords.GUARD_MY_PREFS.toString(),
                                         Context.MODE_PRIVATE
                                     )
                                     val editor = sharedPreferences.edit()
-                                    editor.putString(Keywords.USERTOKEN.toString(), token)
-                                    editor.putString(Keywords.OwnerId.toString(),result.body()!!.userId.toString())
+                                    editor.putString(Keywords.GUARD_USER_TOKEN.toString(), token)
+                                    editor.putString(Keywords.GUARD_OwnerId.toString(),result.body()!!.userId.toString())
                                     editor.apply()
                                     loading.dismiss()
                                 }
@@ -103,13 +94,19 @@ class LoginActivity : AppCompatActivity() {
                                 )
                             }
                         } else {
+                            if(result.code() == 403){
+                                withContext(Dispatchers.Main){
+                                    loading.dismiss()
+                                    Toast.makeText(applicationContext,"Invalid Credentials",Toast.LENGTH_SHORT).show()
+                                }
+                            }
                             if (result.code() == 500) {
                                 try {
                                     withContext(Dispatchers.Main) {
                                         loading.dismiss()
                                         Toast.makeText(
                                             applicationContext,
-                                            "***Invalid User****",
+                                            "***Not Found/Server Error****",
                                             Toast.LENGTH_LONG
                                         ).show()
                                         //TODO:: here we have to make textview visible that will give a error
@@ -117,6 +114,8 @@ class LoginActivity : AppCompatActivity() {
                                 } catch (e: Exception) {
                                     Log.d(TAG, "onCreate: error in coroutine running")
                                 }
+                            }else{
+
                             }
                         }
                     } catch (e: Exception) {

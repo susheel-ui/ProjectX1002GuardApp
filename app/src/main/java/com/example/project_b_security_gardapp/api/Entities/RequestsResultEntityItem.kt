@@ -8,8 +8,8 @@ data class RequestsResultEntityItem(
     val id: Int,
     val ownerId: Int,
     val phoneNumber: String,
-    val photo1: String,
-    val photo2: Any,
+    val photo1: String?,
+    val photo2: Any?,
     val status: String,
     val updatedAt:String
 )

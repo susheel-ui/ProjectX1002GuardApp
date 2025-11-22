@@ -23,15 +23,16 @@ class VeiwRequestActivity : AppCompatActivity() {
         binding = ActivityVeiwRequestBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), MODE_PRIVATE)
         val token =
-            sharedPreferences.getString(Keywords.USERTOKEN.toString(), Keywords.NOTFOUND.toString())
+            sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(), Keywords.GUARD_NOT_FOUND.toString())
         requestViewModel = ViewRequestViewModel(token.toString())
         val id = intent.getStringExtra("id")
         Log.d(TAG, "onCreate id = : $id")
+        Log.d("Data", "onCreate: $token")
         if (id != null) {
             requestViewModel.getRequestById(id, token.toString())
-            Log.d("Data", "onCreate: $token")
+
         }
 
         requestViewModel.request.observe(this) { visitor ->
@@ -83,10 +84,6 @@ class VeiwRequestActivity : AppCompatActivity() {
             .create()
 
         requestViewModel.loading.observe(this) {
-
-            loadingDialog.create().apply {
-                window?.setBackgroundDrawableResource(android.R.color.transparent)
-            }
 
             if (it) {
                 Log.d("Loading Indicator", "onStart: loading $it ")

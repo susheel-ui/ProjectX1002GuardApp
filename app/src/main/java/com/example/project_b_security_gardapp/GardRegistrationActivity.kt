@@ -28,8 +28,9 @@ class GardRegistrationActivity : AppCompatActivity() {
                 .setView(R.layout.fragment_loading)
                 .setCancelable(false)
                 .create()
-            loadingDialog.show()
+
             if (validateInputs()) {
+                loadingDialog.show()
                 // Proceed with registration
                 //TODO:: here we have to do work for registration Guard End
                 val name = binding.EtName.text.toString().trim()

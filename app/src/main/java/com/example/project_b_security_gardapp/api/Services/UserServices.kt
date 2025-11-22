@@ -5,6 +5,8 @@ import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
 import com.example.project_b_security_gardapp.api.Entities.SignUpUserEntity
 import com.example.project_b_security_gardapp.api.Entities.User
 import com.example.project_b_security_gardapp.api.Entities.userLoginEntity
+import com.example.project_b_security_gardapp.api.Responses.ResponseStaffArrayItem
+import com.example.project_b_security_gardapp.api.Responses.TodayStaffEntity
 import com.example.project_b_security_gardapp.api.Responses.UserLoginResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -19,6 +21,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UserServices {
         @POST("/api/auth/login")
@@ -37,10 +40,12 @@ interface UserServices {
                 @Part("guestName") guestName: RequestBody,
                 @Part("phoneNumber") phoneNumber: RequestBody,
                 @Part("description") description: RequestBody,
-                @Part("flatNumber") ownerId: RequestBody,
+                @Part("flatNumber") flatNumber: RequestBody,
                 @Part photo1: MultipartBody.Part?,
                 @Part photo2: MultipartBody.Part?
-        ): Response<ResponseBody>
+        ): Response<ResponseStaffArrayItem>
+
+
 
         @GET("/api/guard/requests")
         suspend fun getAllGuestRequests(
@@ -64,6 +69,34 @@ interface UserServices {
                 @Header("Authorization") token: String,
                 @Path("id") id:Int
         ):Response<RequestsResultEntity>
+
+        @GET("/api/guard/staff")
+        suspend fun getStaff(@Header("Authorization") token: String):Response<List<ResponseStaffArrayItem>>
+
+        @POST("/api/guard/staff/attendance/start")
+        suspend fun startAttendanceOfStaff(
+                @Query("staffCode") staffCode:Int,
+                @Header("Authorization") token: String
+        ):Response<ResponseBody>
+
+        @GET("/api/guard/staff/today-attendance")
+        suspend fun getAllTodayAttendancesStarted(
+                @Header("Authorization") token: String
+        ):Response<List<TodayStaffEntity>>
+
+        @POST("/api/guard/staff/checkout")
+        suspend fun StaffCheckOut(
+                @Query("id") id: Int,
+                @Header("Authorization") token: String
+        ):Response<ResponseBody>
+
+        @POST("/api/guard/staff/checkin")
+        suspend fun StaffCheckIn(
+                @Query("id") id: Int,
+                @Header("Authorization") token: String
+        ):Response<ResponseBody>
+
+
 
 
 

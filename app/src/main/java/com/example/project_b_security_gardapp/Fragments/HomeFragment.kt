@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
 
         // Get SharedPreferences for token
         activity?.let {
-            sharedPreferences = it.getSharedPreferences(Keywords.MYPREFS.toString(), Context.MODE_PRIVATE)
+            sharedPreferences = it.getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), Context.MODE_PRIVATE)
         }
     }
 
@@ -68,14 +68,14 @@ class HomeFragment : Fragment() {
         }
 
         // ✅ Get token
-        token = sharedPreferences.getString(Keywords.USERTOKEN.toString(), "").toString()
+        token = sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(), "").toString()
         Log.d(TAG, "Token from SharedPrefs: $token")
 
         // ✅ Fetch user profile info
         viewModel.getUserInfo(token)
         viewModel.userData.observe(viewLifecycleOwner) {
             if (it != null) {
-                binding.societyNameTV.text = it.societyName
+                binding.societyNameTV.text = it.societyName.uppercase()
                 Log.d(TAG, "onCreateView: $it")
             }
         }

@@ -2,7 +2,6 @@ package com.example.project_b_security_gardapp
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ocx_1002_uapp.Services.WebSocketService
+import com.example.project_b_security_gardapp.Fragments.Attendance_Fragment
 import com.example.project_b_security_gardapp.Fragments.HistoryFragment
 import com.example.project_b_security_gardapp.Fragments.HomeFragment
 import com.example.project_b_security_gardapp.Fragments.UserFragment
@@ -31,11 +31,10 @@ class HomeActivity : AppCompatActivity() {
     lateinit var userRepository: UserRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         activityBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(activityBinding.root)
-        val sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
-        val token = sharedPreferences.getString(Keywords.USERTOKEN.toString(),"NotFound")
+        val sharedPreferences = getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), MODE_PRIVATE)
+        val token = sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(),"NotFound")
 
         try {
             val intent = Intent(applicationContext, WebSocketService::class.java)
@@ -61,11 +60,12 @@ class HomeActivity : AppCompatActivity() {
         }
 
         changeFragment(HomeFragment())
-        activityBinding.bottomNavigation.setOnItemSelectedListener {
+        activityBinding.bottomNavigationBar.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.btm_nav_home -> changeFragment(HomeFragment())
                 R.id.btm_nav_history -> changeFragment(HistoryFragment())
                 R.id.btm_nav_User -> changeFragment(UserFragment())
+                R.id.btn_Attendance -> changeFragment(Attendance_Fragment())
                 else -> {
                     true
                 }

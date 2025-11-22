@@ -3,24 +3,19 @@ package com.example.project_b_security_gardapp.Fragments
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.project_b_security_gardapp.Keywords
-import com.example.project_b_security_gardapp.R
-import com.example.project_b_security_gardapp.VerifyOtpActivity
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
 import com.example.project_b_security_gardapp.api.Services.UserServices
 import com.example.project_b_security_gardapp.databinding.FragmentUserBinding
-import com.example.project_b_security_gardapp.viewModels.Fragments.HomeFragment.ViewModelHomeFragment
 import com.example.project_b_security_gardapp.viewModels.Fragments.UserFragment.UserFragmentViewModelFactory
 import com.example.project_b_security_gardapp.viewModels.Fragments.UserFragment.ViewModelUserFragment
 
@@ -41,7 +36,7 @@ class UserFragment : Fragment() {
         }
         activity?.let {
             sharedPreferences =
-                it.getSharedPreferences(Keywords.MYPREFS.toString(), Context.MODE_PRIVATE)
+                it.getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), Context.MODE_PRIVATE)
         }
     }
 
@@ -56,13 +51,13 @@ class UserFragment : Fragment() {
         val userServices = retrofit.create(UserServices::class.java)
         val repo = UserRepository(userServices)
         val token =
-            sharedPreferences.getString(Keywords.USERTOKEN.toString(), Keywords.NOTFOUND.toString())
+            sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(), Keywords.GUARD_NOT_FOUND.toString())
         viewModelUserFragment = ViewModelProvider(
             this,
             UserFragmentViewModelFactory(repo)
         ).get(ViewModelUserFragment::class.java)
 
-        if (!token.equals(Keywords.NOTFOUND.toString())) {
+        if (!token.equals(Keywords.GUARD_NOT_FOUND.toString())) {
             viewModelUserFragment.getData(token.toString())
         }else{
             Log.d(TAG, "onCreateView: Something wrong with token Token = $token")
@@ -81,9 +76,9 @@ class UserFragment : Fragment() {
             editor.apply()
             activity?.finish()
         }
-        bindingUserFragment.changePasswordbtn.setOnClickListener {
-            activity?.startActivity(Intent(requireContext(),VerifyOtpActivity::class.java))
-        }
+//        bindingUserFragment.changePasswordbtn.setOnClickListener {
+//            activity?.startActivity(Intent(requireContext(),VerifyOtpActivity::class.java))
+//        }
         return bindingUserFragment.root
     }
 

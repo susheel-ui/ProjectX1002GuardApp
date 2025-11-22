@@ -29,7 +29,7 @@ class WebSocketService : Service() {
     private var ownerId: String? = null
     private lateinit var ownerChangeReceiver: BroadcastReceiver
 //    private val serverUrl = "ws://192.168.29.160:8080/ws/websocket" // ✅ Your Spring Boot WebSocket URL
-    private val serverUrl = "ws://10.0.2.2:8080/ws/websocket" // For Avd ✅ Your Spring Boot WebSocket URL
+    private val serverUrl = "wss://gateguard.cloud/ws/websocket" // For Avd ✅ Your Spring Boot WebSocket URL
 
     @SuppressLint("CheckResult", "UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
@@ -37,8 +37,8 @@ class WebSocketService : Service() {
         startAsForeground()
 
         // ✅ Load OwnerId first
-        val sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
-        ownerId = sharedPreferences.getString(Keywords.OwnerId.toString(), null)
+        val sharedPreferences = getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), MODE_PRIVATE)
+        ownerId = sharedPreferences.getString(Keywords.GUARD_OwnerId.toString(), null)
 
         if (ownerId.isNullOrEmpty()) {
             Log.e(TAG, "❌ OwnerId not found — stopping service")

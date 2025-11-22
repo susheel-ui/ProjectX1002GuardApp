@@ -1,13 +1,11 @@
 package com.example.project_b_security_gardapp
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.project_b_security_gardapp.api.Entities.User
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
@@ -20,6 +18,7 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var activityBinding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,12 +31,12 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         //code for automatic login from already login user
         Handler().postDelayed({
-            val sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
+            val sharedPreferences = getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), MODE_PRIVATE)
             val token = sharedPreferences.getString(
-                Keywords.USERTOKEN.toString(),
-                Keywords.NOTFOUND.toString()
+                Keywords.GUARD_USER_TOKEN.toString(),
+                Keywords.GUARD_NOT_FOUND.toString()
             )
-            if (!token.equals(Keywords.NOTFOUND.toString())) {
+            if (!token.equals(Keywords.GUARD_NOT_FOUND.toString())) {
 
 // Login By Token and check valid or expired
                 val service = RetrofitInstance.getInstance.create(UserServices::class.java)
@@ -59,4 +58,5 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this, "app is running", Toast.LENGTH_SHORT).show()
         }, 2000)
     }
+
 }

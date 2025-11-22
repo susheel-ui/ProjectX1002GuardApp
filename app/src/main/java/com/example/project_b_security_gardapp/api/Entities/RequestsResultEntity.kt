@@ -1,9 +1,11 @@
 package com.example.project_b_security_gardapp.api.Entities
 
+import java.io.File
+
 data class RequestsResultEntity(
     val checkInTime: Any,
     val checkOutTime: Any,
-    val createdAt: List<Int>,
+    val createdAt: String,
     val description: String,
     val flatNumber: String,
     val guardId: Int,
@@ -13,10 +15,10 @@ data class RequestsResultEntity(
     val ownerId: Int,
     val ownerName: String,
     val phoneNumber: String,
-    val photo1: String,
+    val photo1:String,
     val photo2: String,
     val societyName: String,
     val status: String,
-    val updatedAt: List<Int>,
+    val updatedAt: String,
     val visitDate: Any
 )

@@ -1,12 +1,13 @@
 package com.example.project_b_security_gardapp
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -37,8 +38,8 @@ class NewGuestFormActivity : AppCompatActivity() {
 
         repository = UserRepository(RetrofitInstance.getInstance.create(UserServices::class.java))
 
-        val sharedPreferences = getSharedPreferences(Keywords.MYPREFS.toString(), MODE_PRIVATE)
-        val token = sharedPreferences.getString(Keywords.USERTOKEN.toString(), null)
+        val sharedPreferences = getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), MODE_PRIVATE)
+        val token = sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(), null)
 
         adapter = ImageAdapter(selectedImages)
         activityBinding.ImageViewPreview.layoutManager = GridLayoutManager(this, 2)
@@ -68,20 +69,30 @@ class NewGuestFormActivity : AppCompatActivity() {
             val drawableId = R.drawable.user_avatar // Replace with your drawable ID
             val bitmap = BitmapFactory.decodeResource(resources, drawableId)
 
-            val files = selectedImages.map { uriToFile(it) }
-            val file1 = files.get(0)
-            val file2 = files.get(1)
+            val files = selectedImages.mapNotNull { uriToFile(it) }
 
+            var file1: File? = files.getOrNull(0)
+            var file2: File? = files.getOrNull(1)
+            Log.d("FILE_1", "Size = ${file1?.length()}  name :- ${file1?.name}")
+            Log.d("FILE_1", "Size = ${file2?.length()}  name :- ${file2?.name}")
             if(token != null) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    var result = repository.sendGuestRequest(token, name, phone, reason, noOfGuest,file1 , file2)
-                    if(result == 200){
-                       withContext(Dispatchers.Main){
-                           finish()
-                       }
+                    val result = repository.sendGuestRequest(token, name, phone, reason, noOfGuest, file1, file2)
+                    if (result.isSuccessful && result.code() == 200){
+                        Log.d(TAG, "Response from sending request : ${result.code()} ${result.body()}")
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(this@NewGuestFormActivity, "Request sent successfully", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
                     }else{
-                        //TODO:: reset all input fields
+                        Log.d(TAG, "Response from sending request error : ${result.code()}")
+                        Log.d(TAG, "Response from sending request error : ${result.message()}")
+                        Log.d(TAG, "Response from sending request error : ${result.errorBody()}")
                     }
+                }.invokeOnCompletion {
+//                    Handler(mainLooper).post {
+//                        finish()
+//                    }
                 }
 
             }
@@ -105,14 +116,27 @@ class NewGuestFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun uriToFile(uri: Uri): File {
-        val inputStream = contentResolver.openInputStream(uri)
-        val file = File(cacheDir, "IMG_${System.currentTimeMillis()}.jpg")
-        inputStream?.use { input ->
-            file.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-        return file
+    fun uriToFile(uri: Uri, quality: Int = 90): File? {return try {
+        val contentResolver = applicationContext.contentResolver
+
+        // Read bitmap from URI
+        val inputStream = contentResolver.openInputStream(uri) ?: return null
+        val originalBitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream.close()
+        // Create temp file for compressed image
+        val random  = (1000000000..9999999999).random()
+        val compressedFile = File(cacheDir, "compressed_image_$random.jpg")
+        // Compress the bitmap
+        val outputStream = FileOutputStream(compressedFile)
+        originalBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        compressedFile  // return file
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
     }
 }
