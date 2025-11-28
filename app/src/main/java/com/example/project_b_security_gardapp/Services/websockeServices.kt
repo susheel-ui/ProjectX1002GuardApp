@@ -80,18 +80,18 @@ class WebSocketService : Service() {
             val channel = NotificationChannel(
                 channelId,
                 "WebSocket Service",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             )
             nm.createNotificationChannel(channel)
         }
 
-        val notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Gate Security")
-            .setContentText("Listening for visitor updates...")
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .build()
+//        val notification = NotificationCompat.Builder(this, channelId)
+//            .setContentTitle("Gate Security")
+//            .setContentText("Listening for visitor updates...")
+//            .setSmallIcon(android.R.drawable.ic_dialog_info)
+//            .build()
 
-        startForeground(1, notification)
+//        startForeground(1, notification)
     }
 
     /** ✅ Simple WebSocket client connection */
