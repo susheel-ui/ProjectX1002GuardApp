@@ -30,16 +30,17 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
         val apiInstance = RetrofitInstance.getInstance
         val userService = apiInstance.create(UserServices::class.java)
         repo = UserRepository(userService)
-        WebSocketHelper.connect()
-        WebSocketHelper.subscribe("/topic/request/${requestId}") { message ->
-            try {
-                Log.d(TAG, "bind: $message")
-                val updated = Gson().fromJson(message, RequestsResultEntity::class.java)
-                _request.postValue(updated)
-            } catch (e: Exception) {
-                Log.d(TAG, "exception: ${e.message} ")
-            }
-        }
+//        WebSocketHelper.connect()
+//        WebSocketHelper.subscribe("/topic/request/${requestId}") { message ->
+//            try {
+//                Log.d(TAG, "bind: $message")
+//                val updated = Gson().fromJson(message, RequestsResultEntity::class.java)
+//                Log.d(TAG, "Value updated : $updated")
+//                _request.postValue(updated)
+//            } catch (e: Exception) {
+//                Log.d(TAG, "exception: ${e.message} ")
+//            }
+//        }
     }
 
 

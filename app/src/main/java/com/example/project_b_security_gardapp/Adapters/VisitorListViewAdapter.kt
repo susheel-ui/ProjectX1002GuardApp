@@ -35,10 +35,6 @@ class VisitorListViewAdapter(
 ) : RecyclerView.Adapter<VisitorListViewAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: VisitorListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private var isStompConnected = false // ✅ Prevent duplicate subscriptions
-        private val serverUrl = "wss://gateguard.cloud/ws/websocket"
-        private lateinit var stompClient: StompClient
-        private val compositeDisposable = CompositeDisposable()
 
         @SuppressLint("CheckResult")
         fun bind(visitor: RequestsResultEntity) {
@@ -61,54 +57,11 @@ class VisitorListViewAdapter(
                 intent.putExtra("id", visitor.id.toString())
                 context.startActivity(intent)
             }
-//            if (isStompConnected) {
-//                Log.d("STOMP", "⚠️ Already connected — skipping re-init")
-//                return
+
+//            WebSocketHelper.connect()
+//            WebSocketHelper.subscribe("/topic/request/${visitor.id}") { message ->
+//                Log.d(TAG, "bind: $message")
 //            }
-
-//            stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, serverUrl)
-
-//            stompClient.lifecycle()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe { event ->
-//                    when (event.type) {
-//                        ua.naiksoftware.stomp.dto.LifecycleEvent.Type.OPENED -> {
-//                            Log.d("STOMP", "✅ Connected")
-//                            isStompConnected = true
-//                        }
-//
-//                        ua.naiksoftware.stomp.dto.LifecycleEvent.Type.ERROR -> {
-//                            Log.e("STOMP", "❌ Error", event.exception)
-//                            isStompConnected = false
-//                        }
-//
-//                        ua.naiksoftware.stomp.dto.LifecycleEvent.Type.CLOSED -> {
-//                            Log.d("STOMP", "⚠️ Closed")
-//                            isStompConnected = false
-//                        }
-//
-//                        else -> {}
-//                    }
-//                }
-//
-//            stompClient.connect()
-
-//            compositeDisposable.add(
-//                stompClient.topic("/topic/request/${visitor.id}")
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe({ topicMessage ->
-//                        Log.d(TAG, "bind: ${topicMessage.payload}")
-//                    }, { error ->
-//                        Log.e("STOMP", "Error in subscription", error)
-//                    })
-//            )
-
-
-            WebSocketHelper.connect()
-            WebSocketHelper.subscribe("/topic/request/${visitor.id}") { message ->
-                Log.d(TAG, "bind: $message")
-
-            }
 
 
            }

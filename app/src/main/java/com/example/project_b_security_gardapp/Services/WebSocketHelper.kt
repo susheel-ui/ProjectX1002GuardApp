@@ -1,6 +1,7 @@
 package com.example.project_b_security_gardapp.Services
 
 import android.annotation.SuppressLint
+import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 
