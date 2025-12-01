@@ -1,14 +1,17 @@
 package com.example.project_b_security_gardapp.viewModels
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.project_b_security_gardapp.Services.WebSocketHelper
 import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
 import com.example.project_b_security_gardapp.api.Services.UserServices
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class ViewRequestViewModel(val requestId:String):ViewModel(){
@@ -27,7 +30,18 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
         val apiInstance = RetrofitInstance.getInstance
         val userService = apiInstance.create(UserServices::class.java)
         repo = UserRepository(userService)
+        WebSocketHelper.connect()
+        WebSocketHelper.subscribe("/topic/request/${requestId}") { message ->
+            try {
+                Log.d(TAG, "bind: $message")
+                val updated = Gson().fromJson(message, RequestsResultEntity::class.java)
+                _request.postValue(updated)
+            } catch (e: Exception) {
+                Log.d(TAG, "exception: ${e.message} ")
+            }
+        }
     }
+
 
     fun getRequestById(id:String,token:String){
             viewModelScope.launch {

@@ -1,17 +1,30 @@
 package com.example.project_b_security_gardapp.Adapters
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project_b_security_gardapp.R
+import com.example.project_b_security_gardapp.Services.WebSocketHelper
 import com.example.project_b_security_gardapp.VeiwRequestActivity
 import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
 import com.example.project_b_security_gardapp.databinding.VisitorListLayoutBinding
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import org.java_websocket.client.WebSocketClient
+import org.java_websocket.handshake.ServerHandshake
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
+import java.lang.Exception
+import java.net.URI
 import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -22,13 +35,84 @@ class VisitorListViewAdapter(
 ) : RecyclerView.Adapter<VisitorListViewAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: VisitorListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private var isStompConnected = false // ✅ Prevent duplicate subscriptions
+        private val serverUrl = "wss://gateguard.cloud/ws/websocket"
+        private lateinit var stompClient: StompClient
+        private val compositeDisposable = CompositeDisposable()
 
+        @SuppressLint("CheckResult")
         fun bind(visitor: RequestsResultEntity) {
             binding.tvGuestName.text = visitor.guestName
             binding.tvFlatNumber.text = visitor.flatNumber.toString()
 //            binding.tvPhoneNumber.text = visitor.phoneNumber
 //            binding.tvDescription.text = visitor.description
             binding.tvType.text = visitor.status
+            val color = when (visitor.status) {
+                "PENDING" -> ContextCompat.getColor(
+                    context,
+                    R.color.orange_yellow
+                )   // orange/yellow
+                "REJECTED" -> ContextCompat.getColor(context, R.color.red) // red
+                else -> ContextCompat.getColor(context, R.color.green)       // green
+            }
+            binding.tvType.backgroundTintList = ColorStateList.valueOf(color)
+            binding.root.setOnClickListener {
+                val intent = Intent(context, VeiwRequestActivity::class.java)
+                intent.putExtra("id", visitor.id.toString())
+                context.startActivity(intent)
+            }
+//            if (isStompConnected) {
+//                Log.d("STOMP", "⚠️ Already connected — skipping re-init")
+//                return
+//            }
+
+//            stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, serverUrl)
+
+//            stompClient.lifecycle()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe { event ->
+//                    when (event.type) {
+//                        ua.naiksoftware.stomp.dto.LifecycleEvent.Type.OPENED -> {
+//                            Log.d("STOMP", "✅ Connected")
+//                            isStompConnected = true
+//                        }
+//
+//                        ua.naiksoftware.stomp.dto.LifecycleEvent.Type.ERROR -> {
+//                            Log.e("STOMP", "❌ Error", event.exception)
+//                            isStompConnected = false
+//                        }
+//
+//                        ua.naiksoftware.stomp.dto.LifecycleEvent.Type.CLOSED -> {
+//                            Log.d("STOMP", "⚠️ Closed")
+//                            isStompConnected = false
+//                        }
+//
+//                        else -> {}
+//                    }
+//                }
+//
+//            stompClient.connect()
+
+//            compositeDisposable.add(
+//                stompClient.topic("/topic/request/${visitor.id}")
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe({ topicMessage ->
+//                        Log.d(TAG, "bind: ${topicMessage.payload}")
+//                    }, { error ->
+//                        Log.e("STOMP", "Error in subscription", error)
+//                    })
+//            )
+
+
+            WebSocketHelper.connect()
+            WebSocketHelper.subscribe("/topic/request/${visitor.id}") { message ->
+                Log.d(TAG, "bind: $message")
+
+            }
+
+
+           }
+
 //
 //            try {
 //                val timeAgoTxt = getTimeAgo(visitor.createdAt.toString())
@@ -45,13 +129,8 @@ class VisitorListViewAdapter(
 //                .into(binding.ivGuestImage)
 
             // ✅ Optional click listener
-            binding.root.setOnClickListener {
-                Toast.makeText(context, "Visitor: ${visitor.guestName}", Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, VeiwRequestActivity::class.java)
-                intent.putExtra("id", visitor.id.toString())
-                context.startActivity(intent)
-            }
-        }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/Secondary_Color"/>
+
+    <!-- Smooth curve radius for cutout effect -->
+    <corners android:radius="24dp" />
+
+    <!-- Extra bottom padding for bigger height look -->
+    <padding
+        android:left="0dp"
+        android:right="0dp"
+        android:bottom="12dp"/>
+
+</shape>

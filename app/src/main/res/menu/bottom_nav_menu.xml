@@ -14,7 +14,7 @@
     <item
         android:id="@+id/btn_Attendance"
         android:title="Attendance"
-        android:icon="@drawable/attendance"
+        android:icon="@drawable/daily_calendar"
         />
     <item
         android:id="@+id/btm_nav_User"

@@ -1,6 +1,7 @@
 package com.example.project_b_security_gardapp
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Bitmap
@@ -60,6 +61,9 @@ class NewGuestFormActivity : AppCompatActivity() {
         }
 
         activityBinding.btnSend.setOnClickListener {
+            val loading = androidx.appcompat.app.AlertDialog.Builder(this).setView(R.layout.loading_layout).create()
+            loading.show()
+
             val name = activityBinding.InputFieldName.text.toString()
             val phone = "+91".plus(activityBinding.InputFieldPhone.text.toString())
             val reason = activityBinding.InputFieldDescription.text.toString()
@@ -81,10 +85,13 @@ class NewGuestFormActivity : AppCompatActivity() {
                     if (result.isSuccessful && result.code() == 200){
                         Log.d(TAG, "Response from sending request : ${result.code()} ${result.body()}")
                         withContext(Dispatchers.Main){
+                           loading.dismiss()
                             Toast.makeText(this@NewGuestFormActivity, "Request sent successfully", Toast.LENGTH_SHORT).show()
                             finish()
                         }
                     }else{
+                        loading.dismiss()
+                        Toast.makeText(applicationContext, "Request not send.... Try Again", Toast.LENGTH_SHORT).show()
                         Log.d(TAG, "Response from sending request error : ${result.code()}")
                         Log.d(TAG, "Response from sending request error : ${result.message()}")
                         Log.d(TAG, "Response from sending request error : ${result.errorBody()}")

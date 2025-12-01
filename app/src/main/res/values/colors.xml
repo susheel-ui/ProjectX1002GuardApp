@@ -9,5 +9,6 @@
     <color name="Primary_Color">#335AA6</color>
     <color name="Secondary_Color">#E9F2FF</color>
     <color name="text_Primary_color">#2E3A59</color>
+    <color name="orange_yellow">#FFC107</color>
 
 </resources>

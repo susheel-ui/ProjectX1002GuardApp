@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ocx_1002_uapp.Services.WebSocketService
 import com.example.project_b_security_gardapp.api.Entities.userLoginEntity
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
@@ -78,20 +77,25 @@ class LoginActivity : AppCompatActivity() {
                                     editor.putString(Keywords.GUARD_OwnerId.toString(),result.body()!!.userId.toString())
                                     editor.apply()
                                     loading.dismiss()
+                                    withContext(Dispatchers.IO){
+                                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                                        finish()
+                                    }
                                 }
                             }.invokeOnCompletion {
-                                val intent = Intent(applicationContext, WebSocketService::class.java)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    startForegroundService(intent)
-                                } else {
-                                    startService(intent)
-                                }
-                                startActivity(
-                                    Intent(
-                                        applicationContext,
-                                        HomeActivity::class.java
-                                    )
-                                )
+//                                val intent = Intent(applicationContext, WebSocketService::class.java)
+
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                                    startForegroundService(intent)
+//                                } else {
+//                                    startService(intent)
+//                                }
+//                                startActivity(
+//                                    Intent(
+//                                        applicationContext,
+//                                        HomeActivity::class.java
+//                                    )
+//                                )
                             }
                         } else {
                             if(result.code() == 403){
@@ -106,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
                                         loading.dismiss()
                                         Toast.makeText(
                                             applicationContext,
-                                            "***Not Found/Server Error****",
+                                            "*** Invalid MobileNumber Or Password ****",
                                             Toast.LENGTH_LONG
                                         ).show()
                                         //TODO:: here we have to make textview visible that will give a error

@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.ocx_1002_uapp.Services.WebSocketService
 import com.example.project_b_security_gardapp.Fragments.Attendance_Fragment
 import com.example.project_b_security_gardapp.Fragments.HistoryFragment
 import com.example.project_b_security_gardapp.Fragments.HomeFragment
@@ -32,20 +31,11 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = ActivityHomeBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
         setContentView(activityBinding.root)
+
         val sharedPreferences = getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), MODE_PRIVATE)
         val token = sharedPreferences.getString(Keywords.GUARD_USER_TOKEN.toString(),"NotFound")
-
-        try {
-            val intent = Intent(applicationContext, WebSocketService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            } else {
-                startService(intent)
-            }
-        }catch (e:Exception){
-            Log.d(TAG, "onCreate: HomeActivity ${e.message}")
-        }
 
         if(token.toString().equals("NotFound")){
                     Toast.makeText(this, token.toString(), Toast.LENGTH_SHORT).show()
