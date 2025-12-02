@@ -15,7 +15,6 @@ object WebSocketHelper {
     @SuppressLint("CheckResult")
     fun connect() {
         if (isConnected) return
-
         stompClient.lifecycle().subscribe {
             when (it.type) {
                 LifecycleEvent.Type.OPENED ->{

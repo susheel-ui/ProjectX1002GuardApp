@@ -68,7 +68,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
     }
     private fun changeFragment(fragment : Fragment): Boolean {
         val fragmentManager  = supportFragmentManager

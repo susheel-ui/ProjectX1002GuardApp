@@ -63,7 +63,6 @@ class VisitorListViewAdapter(
 //                Log.d(TAG, "bind: $message")
 //            }
 
-
            }
 
 //

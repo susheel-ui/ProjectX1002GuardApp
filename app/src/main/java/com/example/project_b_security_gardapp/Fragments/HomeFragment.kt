@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.project_b_security_gardapp.Adapters.RecentGurestAdapter
 import com.example.project_b_security_gardapp.Keywords
 import com.example.project_b_security_gardapp.Adapters.VisitorListViewAdapter
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
@@ -25,7 +26,7 @@ import com.example.project_b_security_gardapp.viewModels.RequestsViewModel
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var adapter: VisitorListViewAdapter
+    private lateinit var adapter: RecentGurestAdapter
     private lateinit var viewModel: ViewModelHomeFragment
     private lateinit var requestsViewModel: RequestsViewModel
     private lateinit var sharedPreferences: SharedPreferences
@@ -60,7 +61,7 @@ class HomeFragment : Fragment() {
 
         // ✅ Initialize RecyclerView
         try {
-            adapter = VisitorListViewAdapter(requireContext(), emptyList())
+            adapter = RecentGurestAdapter(requireContext(), emptyList())
             binding.RecentGuest.layoutManager = LinearLayoutManager(requireContext())
             binding.RecentGuest.adapter = adapter
         } catch (e: Exception) {
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
         }
 
         // ✅ Observe visitor list
-        requestsViewModel.recentRequestsLiveData.observe(viewLifecycleOwner) { visitors ->
+        viewModel.recentRequests.observe(viewLifecycleOwner) { visitors ->
             if (visitors.isNotEmpty()) {
                 adapter.updateData(visitors) // ✅ Fixed here
             } else {
@@ -106,5 +107,10 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         requestsViewModel.getGuestRequests(token)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.stopLoop()
     }
 }

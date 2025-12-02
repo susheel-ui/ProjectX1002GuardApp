@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                         val result = userRepository.login(loginEntity)
                         Log.d(TAG, "onCreate: ${result.code()}")
                         Log.d(TAG, "onCreate result : ${result.body()?.token}")
-                        if (result.code() == 200) {
+                        if (result.isSuccessful && result.code() == 200 && result.body()?.role == "ROLE_GUARD") {
                             CoroutineScope(Dispatchers.IO).launch {
                                 if (result.body() != null) {
                                     val token = result.body()?.token
@@ -118,7 +118,13 @@ class LoginActivity : AppCompatActivity() {
                                 } catch (e: Exception) {
                                     Log.d(TAG, "onCreate: error in coroutine running")
                                 }
-                            }else{
+                            }else if(result.code() == 502){
+                                withContext(Dispatchers.Main){
+                                    loading.dismiss()
+                                    Toast.makeText(applicationContext,"Server Error",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            else{
 
                             }
                         }

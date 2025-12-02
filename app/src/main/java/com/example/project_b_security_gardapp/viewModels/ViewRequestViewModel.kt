@@ -31,14 +31,16 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
         val userService = apiInstance.create(UserServices::class.java)
         repo = UserRepository(userService)
 //        WebSocketHelper.connect()
-//        WebSocketHelper.subscribe("/topic/request/${requestId}") { message ->
+//        WebSocketHelper.subscribe("/topic/request/$requestId") { message ->
 //            try {
 //                Log.d(TAG, "bind: $message")
+//
 //                val updated = Gson().fromJson(message, RequestsResultEntity::class.java)
 //                Log.d(TAG, "Value updated : $updated")
-//                _request.postValue(updated)
+//                _request.postValue(updated.copy())
+//
 //            } catch (e: Exception) {
-//                Log.d(TAG, "exception: ${e.message} ")
+//                Log.d(TAG, "exception: ${e.message}")
 //            }
 //        }
     }
@@ -72,6 +74,7 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
             }
         }
     }
+
     fun requestCheckOut(id: String,token: String){
         viewModelScope.launch {
             val result = repo.VisitorCheckOut(token = "Bearer $token", id = id)

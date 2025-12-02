@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.project_b_security_gardapp.api.Entities.Entity_HomePageRequests
 import com.example.project_b_security_gardapp.api.Entities.GuestRequestResponse
 import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
 import com.example.project_b_security_gardapp.api.Entities.SignUpUserEntity
@@ -132,6 +133,8 @@ class UserRepository(private val userServices: UserServices) {
     suspend fun staffCheckOut(id:Int,token: String):Response<ResponseBody>{
         return userServices.StaffCheckOut(id,token)
     }
-
+    suspend fun getHomePageRequests(token: String):Response<List<Entity_HomePageRequests>> {
+        return userServices.getHomePageRequests(token)
+    }
 
 }

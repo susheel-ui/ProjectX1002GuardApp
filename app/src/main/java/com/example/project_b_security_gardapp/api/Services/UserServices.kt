@@ -1,5 +1,6 @@
 package com.example.project_b_security_gardapp.api.Services
 
+import com.example.project_b_security_gardapp.api.Entities.Entity_HomePageRequests
 import com.example.project_b_security_gardapp.api.Entities.GuestRequestResponse
 import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
 import com.example.project_b_security_gardapp.api.Entities.SignUpUserEntity
@@ -96,6 +97,10 @@ interface UserServices {
                 @Header("Authorization") token: String
         ):Response<ResponseBody>
 
+        @GET("/api/guard/requests/new")
+        suspend fun getHomePageRequests(
+                @Header("Authorization") token: String
+        ):Response<List<Entity_HomePageRequests>>
 
 
 
