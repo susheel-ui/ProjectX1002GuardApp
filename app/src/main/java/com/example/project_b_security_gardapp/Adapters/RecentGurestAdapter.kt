@@ -21,7 +21,6 @@ class RecentGurestAdapter(private val context:Context,private var list:List<Enti
                 val intent = Intent(context, VeiwRequestActivity::class.java)
                 intent.putExtra("id",item.id.toString())
                 context.startActivity(intent)
-
             }
             }
     }

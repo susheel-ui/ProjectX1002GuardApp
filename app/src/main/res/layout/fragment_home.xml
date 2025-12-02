@@ -140,12 +140,14 @@
         app:layout_constraintTop_toBottomOf="@id/InfoCard" />
 
     <TextView
+        android:id="@+id/viewAllBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View All"
         android:textColor="@color/Primary_Color"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/TVRecentGuest"
         app:layout_constraintEnd_toEndOf="@id/InfoCard"
         app:layout_constraintTop_toTopOf="@id/TVRecentGuest" />
