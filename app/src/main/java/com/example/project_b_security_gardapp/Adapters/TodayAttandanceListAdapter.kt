@@ -55,4 +55,5 @@ class TodayAttandanceListAdapter(private val context: Context, private val list:
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
          holder.bind(list.get(position))
     }
+
 }

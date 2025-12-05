@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project_b_security_gardapp.Adapters.StaffItemAdapter
 import com.example.project_b_security_gardapp.AttendanceActivity
@@ -67,6 +68,27 @@ class Attendance_Fragment : Fragment() {
             adapter = StaffItemAdapter(requireContext(),it)
             binding.rvStaffList.adapter = adapter
         }
+        // here code for searching
+        binding.serachBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val filteredList = if (!newText.isNullOrEmpty()) {
+                    adapter.list.filter {
+                        it.staffCode.toString().contains(newText, ignoreCase = true)
+                    }
+                } else {
+                    adapter.list
+                }
+                adapter.list = filteredList.toMutableList()
+                adapter.notifyDataSetChanged()
+                return true
+            }
+        })
+
+
         //loading alert box
         viewModel.loading.observe(viewLifecycleOwner){
 

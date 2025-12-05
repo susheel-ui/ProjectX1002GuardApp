@@ -11,7 +11,7 @@ import com.example.project_b_security_gardapp.api.Responses.ResponseStaffArrayIt
 import com.example.project_b_security_gardapp.databinding.StaffListLayoutBinding
 import kotlin.contracts.contract
 
-class StaffItemAdapter(private val context: Context, val list: List<ResponseStaffArrayItem>) : RecyclerView.Adapter<StaffItemAdapter.ViewHolder>() {
+class StaffItemAdapter(private val context: Context, var list: List<ResponseStaffArrayItem>) : RecyclerView.Adapter<StaffItemAdapter.ViewHolder>() {
     class ViewHolder(private val binding: StaffListLayoutBinding,val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(entity:ResponseStaffArrayItem){
             binding.tvStaffName.text = entity.name.toString()

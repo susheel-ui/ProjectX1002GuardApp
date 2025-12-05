@@ -41,6 +41,8 @@ class AttendanceActivity : AppCompatActivity() {
         adapter = TodayAttandanceListAdapter(this, emptyList(),viewModel,token.toString())
         binding.rcTodayAttendence.adapter = adapter
 
+
+
         viewModel.todayStaffLoading.observe(this){
 
         }

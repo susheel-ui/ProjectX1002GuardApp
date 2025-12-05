@@ -47,11 +47,11 @@ class ViewModelHomeFragment(private val userRepository: UserRepository) : ViewMo
     }
 
     init {
-        Thread{
-            Handler(Looper.getMainLooper()).postDelayed({
-                loading.postValue(false)
-            }, 3000)
-        }
+//        Thread{
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                loading.postValue(false)
+//            }, 3000)
+//        }
     }
 
     fun getUserInfo(token: String) {
@@ -60,8 +60,10 @@ class ViewModelHomeFragment(private val userRepository: UserRepository) : ViewMo
             loading.postValue(true)
             try {
                 val result = userRepository.GetUserBytoken(token)
-                if (result.isSuccessful && result.body() != null) {
+                if (result.isSuccessful && result.code() == 200) {
                     _userData.postValue(result.body())
+                    loading.postValue(false)
+                    result.body() != null
                 } else {
                     errorMessage.postValue("Failed: ${result.code()} - ${result.message()}")
                     Log.e(TAG, "Failed: ${result.code()} - ${result.message()}")
@@ -70,7 +72,7 @@ class ViewModelHomeFragment(private val userRepository: UserRepository) : ViewMo
                 errorMessage.postValue(e.localizedMessage ?: "Unexpected error")
                 Log.e(TAG, "Error fetching user info: ${e.message}")
             } finally {
-                loading.postValue(false)
+
             }
         }
 

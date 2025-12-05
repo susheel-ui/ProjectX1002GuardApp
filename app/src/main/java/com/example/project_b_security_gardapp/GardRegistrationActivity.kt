@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.project_b_security_gardapp.api.Entities.SignUpUserEntity
 import com.example.project_b_security_gardapp.api.Entities.User
 import com.example.project_b_security_gardapp.api.Repo.UserRepository
@@ -22,7 +24,12 @@ class GardRegistrationActivity : AppCompatActivity() {
         binding = ActivityGardRegistrationBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root)
+        { root, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            root.setPadding(insets.left, insets.top, insets.right, 0)
+            windowInsets
+        }
         binding.buttonSignUp.setOnClickListener {
             val loadingDialog = AlertDialog.Builder(this)
                 .setView(R.layout.fragment_loading)

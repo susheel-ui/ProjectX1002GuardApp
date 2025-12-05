@@ -2,9 +2,12 @@ package com.example.project_b_security_gardapp.Adapters
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project_b_security_gardapp.R
 import com.example.project_b_security_gardapp.VeiwRequestActivity
 import com.example.project_b_security_gardapp.api.Entities.Entity_HomePageRequests
 import com.example.project_b_security_gardapp.api.Entities.RequestsResultEntity
@@ -17,6 +20,15 @@ class RecentGurestAdapter(private val context:Context,private var list:List<Enti
                 binding.tvGuestName.text = item.guestName
                 binding.tvType.text = item.status
                 binding.tvFlatNumber.text = item.flatNumber
+            val color = when (item.status) {
+                "PENDING" -> ContextCompat.getColor(
+                    context,
+                    R.color.orange_yellow
+                )   // orange/yellow
+                "REJECTED" -> ContextCompat.getColor(context, R.color.red) //red
+                else -> ContextCompat.getColor(context, R.color.green)    //green
+            }
+            binding.tvType.backgroundTintList = ColorStateList.valueOf(color)
             binding.root.setOnClickListener{
                 val intent = Intent(context, VeiwRequestActivity::class.java)
                 intent.putExtra("id",item.id.toString())

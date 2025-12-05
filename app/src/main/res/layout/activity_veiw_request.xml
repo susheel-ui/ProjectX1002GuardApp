@@ -108,6 +108,7 @@
 
         <!-- Images Section -->
         <TextView
+            android:visibility="gone"
             android:text="Attached Images:"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,6 +118,7 @@
             android:layout_marginBottom="8dp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:id="@+id/rvImages"
             android:layout_width="match_parent"
             android:layout_height="120dp"

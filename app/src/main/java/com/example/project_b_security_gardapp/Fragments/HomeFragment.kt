@@ -53,7 +53,6 @@ class HomeFragment : Fragment() {
             sharedPreferences = it.getSharedPreferences(Keywords.GUARD_MY_PREFS.toString(), Context.MODE_PRIVATE)
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

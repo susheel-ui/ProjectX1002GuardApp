@@ -12,6 +12,7 @@ import com.example.project_b_security_gardapp.api.Repo.UserRepository
 import com.example.project_b_security_gardapp.api.Retrofit.RetrofitInstance
 import com.example.project_b_security_gardapp.api.Services.UserServices
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ViewRequestViewModel(val requestId:String):ViewModel(){
@@ -24,6 +25,32 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
     // 🔹 LiveData for loading state
     private val _loading = MutableLiveData<Boolean>(true)
     val loading: LiveData<Boolean> = _loading
+
+    private var isRunning = true
+
+    fun stopLoop() {
+        isRunning = false
+    }
+    private fun startRepeatingApiCall(id:String,token:String){
+        viewModelScope.launch {
+            while (isRunning) {
+                    try {
+                        val result =  repo.getRequestById(id,token)
+                        if(result.isSuccessful && result.code() == 200){
+                            Log.d("Success", "getRequestById: ${result.body()}")
+                            _request.postValue(result.body())
+                            _loading.postValue(false)
+                        }else{
+                            Log.d("Error", "getRequestById: ${result.code()}")
+                        }
+                    }catch (e:Exception){
+                        Log.d("Exception", "getRequestById: ${e.toString()}")
+                    }
+                delay(5000)
+                }
+
+            }
+    }
 
 
     init {
@@ -47,6 +74,7 @@ class ViewRequestViewModel(val requestId:String):ViewModel(){
 
 
     fun getRequestById(id:String,token:String){
+        startRepeatingApiCall(id,"Bearer $token")
             viewModelScope.launch {
               try {
                  val result =  repo.getRequestById(id,"Bearer $token")
